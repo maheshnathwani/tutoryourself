@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
+  <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  <script src="../dist/angularYouTube.min.js"></script>
+  <script src="FunctionsController.js"></script>  
+  <script src="EventsController.js"></script>
+</head>
+
+<body ng-app="angularYouTube">
+  <div>
+    <h3>Simplest Usage</h3>
+    <pre class="prettyprint"><code>&lt;youtube-video video-id=&quot;LM1OL7qQib4&quot;&gt;&lt;/youtube-video&gt;</code></pre>
+    <youtube-video video-id="LM1OL7qQib4"></youtube-video>
+  </div>
+
+  <div>
+    <h3>Including Attributes</h3>
+    <p>See angularYouTube.js and <a href="https://developers.google.com/youtube/player_parameters">the api parameters page</a> for a full list of available parameters.</p>
+    <pre class="prettyprint"><code>&lt;youtube-video video-id=&quot;LM1OL7qQib4&quot; width=&quot;320&quot; height=&quot;240&quot; show-info=&quot;0&quot; start=&quot;6&quot;&gt;&lt;/youtube-video&gt;</code></pre>
+    <youtube-video video-id="LM1OL7qQib4" width="320" height="240" show-info="0" start="6"></youtube-video>
+  </div>
+
+  <div>
+    <h3>Calling Player Functions</h3>
+    <p>In order to call player functions you need to set the player-ready attribute and assign the player to your scope.</p>
+    <p>
+      There are <a href="https://developers.google.com/youtube/iframe_api_reference?hl=en#Functions">a lot of functions</a> available.
+    </p>
+    <pre class="prettyprint"><code>  &lt;div ng-controller=&quot;FunctionsController&quot;&gt;
+    &lt;youtube-video video-id=&quot;LM1OL7qQib4&quot; player-ready=&quot;playerReady(event)&quot;&gt;&lt;/youtube-video&gt;
+    &lt;div&gt;
+      &lt;input type=&quot;button&quot; value=&quot;Play&quot; ng-click=&quot;play()&quot; /&gt;
+      &lt;input type=&quot;button&quot; value=&quot;Pause&quot; ng-click=&quot;pause()&quot; /&gt;
+      &lt;input type=&quot;button&quot; value=&quot;Stop&quot; ng-click=&quot;stop()&quot; /&gt;
+      &lt;input type=&quot;button&quot; value=&quot;Mute&quot; ng-click=&quot;mute()&quot; /&gt;
+      &lt;input type=&quot;button&quot; value=&quot;Unmute&quot; ng-click=&quot;unMute()&quot; /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;</code></pre>
+    <pre class="prettyprint"><code>app.controller('FunctionsController', function($scope) {
+  $scope.playerReady = function(event) {
+    $scope.player = event.target;
+  };
+
+  $scope.play = function() {
+    $scope.player.playVideo();
+  };
+
+  $scope.pause = function() {
+    $scope.player.pauseVideo();
+  };
+  
+  $scope.stop = function() {
+    $scope.player.stopVideo();
+  };
+  
+  $scope.mute = function() {
+    $scope.player.mute();
+  };
+  
+  $scope.unMute = function() {
+    $scope.player.unMute();
+  };
+});</code></pre>
+    <div ng-controller="FunctionsController">
+      <youtube-video video-id="LM1OL7qQib4" player-ready="playerReady(event)"></youtube-video>
+      <div>
+        <input type="button" value="Play" ng-click="play()" />
+        <input type="button" value="Pause" ng-click="pause()" />
+        <input type="button" value="Stop" ng-click="stop()" />
+        <input type="button" value="Mute" ng-click="mute()" />
+        <input type="button" value="Unmute" ng-click="unMute()" />
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3>Subscribing to Events</h3>
+    <p>There are 6 events exposed by the api. These can be subscribed to by assigning functions to their corresponding attributes.</p>
+    <pre class="prettyprint"><code ng-non-bindable>    &lt;div ng-controller=&quot;EventsController&quot;&gt;
+      &lt;youtube-video video-id=&quot;LM1OL7qQib4&quot; player-ready=&quot;playerReady(event)&quot; state-change=&quot;stateChange(event)&quot; playback-quality-change=&quot;playbackQualityChange(event)&quot;&gt;&lt;/youtube-video&gt;
+      &lt;p&gt;State: {{state}}&lt;/p&gt;
+      &lt;p&gt;Quality: {{quality}}&lt;/p&gt;
+    &lt;/div&gt;</code></pre>
+    <pre class="prettyprint"><code>app.controller('EventsController', function($scope) {
+  $scope.playerReady = function(event) {
+    $scope.player = event.target;
+  };
+
+  $scope.stateChange = function(event) {
+    $scope.$apply(function() {
+      if (event.data === YT.PlayerState.ENDED)
+        $scope.state = "ENDED";
+      else if (event.data === YT.PlayerState.PLAYING)
+        $scope.state = "PLAYING";
+      else if (event.data === YT.PlayerState.PAUSED)
+        $scope.state = "PAUSED";
+      else if (event.data === YT.PlayerState.BUFFERING)
+        $scope.state = "BUFFERING";
+      else if (event.data === YT.PlayerState.CUED)
+        $scope.state = "CUED";
+    });
+  };
+
+  $scope.playbackQualityChange = function(event) {
+    $scope.$apply(function() {
+      $scope.quality = event.data;
+    });
+  };
+});</code></pre>
+    <div ng-controller="EventsController">
+      <youtube-video video-id="LM1OL7qQib4" player-ready="playerReady(event)" state-change="stateChange(event)" playback-quality-change="playbackQualityChange(event)"></youtube-video>
+      <p>State: {{state}}</p>
+      <p>Quality: {{quality}}</p>
+    </div>
+  </div>
+</body>
+
+</html>

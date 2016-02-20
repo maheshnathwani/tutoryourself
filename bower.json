@@ -1,0 +1,28 @@
+{
+  "name": "angular-material-boilerplate",
+  "version": "0.0.1",
+  "authors": [
+    "Indrajith K L <yojith2008@gmail.com>"
+  ],
+  "description": "AngularJS boilerplate with Angular Material + Angular UI Router",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.4.x",
+    "angular-material": "^1.x",
+    "angular-ui-router": "^0.2.x"
+  },
+  "devDependencies": {
+    "angular-sanitize": "^1.5.0",
+    "angular-youtube-embed": "^1.0.2",
+    "angular-scroll-animate": "^0.9.8",
+    "angular-skrollr": "^0.1.5"
+  }
+}
