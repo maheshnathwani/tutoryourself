@@ -1,2 +1,2 @@
 # tutoryourself
-Final year project
+Learn to code while playing games
